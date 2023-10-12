@@ -1,0 +1,46 @@
+mport speech_recognition as sr
+import pyttsx3
+import datetime
+import webbrowser
+import pyaudio
+import sounddevice as sd
+from Datetime import timezone
+from DateTime import DateTime
+
+
+
+
+assistant_name = "Tobi"
+r=sr.Recognizer()
+print(f"{assistant_name}: Hello, How can I be of assist?")
+engine = pyttsx3.init
+mic= sr.Microphone(device_index=1)
+print(x)
+rate= engine.getProperty('rate')
+engine.setProperty('rate',190)
+
+
+voices=engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+
+
+engine.say("Hello, How can I be of assistant?")
+engine.runAndWait()
+endingkeywords = ["No" , "No thank you", " "]
+while True:
+    with mic as source:
+        print("Listening...")
+        r.adjust_for_ambient_noise(source, duration= 0.2)
+        audio = r.listen(source)
+        print("Analyzing...")
+        user_input = r.recognize_google(audio)
+        print(f'User:{user_input}')
+        text=(f'User: {user_input}\n{assistant_name}:')
+    if user_input == "I'm good":
+        engine.say("Is there any thing else I could help you with?")
+        engine.runAndWait()
+    elif user_input (endingkeywords):
+        engine.say("Ok then I'm off")
+        engine.runAndWait()
+        print(f"{assistant_name}:You are Welcome")
+        break
