@@ -1,0 +1,56 @@
+import speech_recognition as sr
+import pyttsx3
+import datetime
+import sounddevice as sd
+from datetime import timezone
+from Py_Weather import get_weather
+
+assistant_name = "Tobi"
+r=sr.Recognizer()
+print(f"{assistant_name}: Hello, How can I be of assist?")
+engine = pyttsx3.init()
+mic= sr.Microphone(device_index=1)
+rate= engine.getProperty('rate')
+engine.setProperty('rate',180)
+
+
+voices=engine.getProperty('voices')
+engine.setProperty('voice', voices[0])
+hour= int(datetime.datetime.now().hour)
+if hour >= 0 and hour<12:
+    engine.say("Good Morning Sir")
+elif hour >=12 and hour <18:
+    engine.say("Good Afternoon Sir")
+elif hour >=18 and hour <22:
+    engine.say("Good Evening Sir")
+else:
+    engine.say("You should go to sleeping right now sir")
+
+engine.say("How may I be of assistant?")
+engine.runAndWait()
+while True:
+    with mic as source:
+        print("Listening...")
+        r.adjust_for_ambient_noise(source, duration= 0.1)
+        audio = r.listen(source)
+        print("Analyzing...")
+        user_input = r.recognize_google(audio)
+        print(f'Marcos:{user_input}')
+        text=(f'Marcos: {user_input}\n{assistant_name}:')
+        if "time" in user_input:
+            time=datetime.datetime.now().strftime('%I:%M %p')
+            print("The time is : " + time )
+            engine.say("The Time right now is " + time )
+            engine.say("Is there any thing else I could help you with?")
+            engine.runAndWait()
+        elif "weather" in user_input:
+            print("Check your phone")
+            weather=get_weather("newark")
+            engine.say("Is there any thing else I could help you with?")
+            engine.runAndWait()
+
+        elif "no" in user_input:
+            engine.say("No Problem Sir")
+            print("End of the code")
+            engine.runAndWait()
+            break  
